@@ -37,7 +37,7 @@ def writeDS():
         for wordcount in finalcorpus:
             index+=1
             totalfile.write('%s\t'%(wordcount.__len__()))
-            for u,v in wordcount:
+            for u,v in wordcount.items():
                 totalfile.write('%s:%s '%(u,v))
             totalfile.write('\n')
 
@@ -52,7 +52,7 @@ def convert():
         voc.write(l+'\n') #.decode('ascii').replace("\u2014","-")
     voc.close()
     for wordcount in newcorpus:
-        for key,value in wordcount:
+        for key,value in wordcount.items():
             temp[str(sorted_vocab.index(key))]=wordcount[key]
         finalcorpus.append(temp)
         temp={}
@@ -87,22 +87,12 @@ def steming(doc):
 def rem_stopwords(temp):
     en_stop=temp[1]
     rem_sw=[]
-    a=temp[0]
-    for i in a:
+    for i in temp:
         if i.strip(string.whitespace) not in en_stop:
             if i.strip(string.whitespace).__len__()>=3:
                 rem_sw+=[i]
     return rem_sw
 
-
-
-def writetemp(s_tok,name):
-    d=io.open(name+".txt","w",encoding="utf-8")
-    for i in s_tok:
-        for w in i:
-            d.write(w+" ")
-        d.write(u"\n")
-    d.close()
 
 if __name__ == '__main__':
     
@@ -124,7 +114,6 @@ if __name__ == '__main__':
         en_stop[i.strip()]=1
     i=0
     pool=Pool(N_cores)
-    print("scentence tokenization start")
     s_tok=pool.map(sent_tok,f)
     print("scentence tokenization done")
     w_tok=pool.map(wrd_tok,s_tok)
