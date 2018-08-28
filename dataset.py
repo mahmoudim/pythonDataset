@@ -6,6 +6,7 @@ from nltk.stem.porter import PorterStemmer
 import re
 import string
 from multiprocessing import Pool
+import sys, os
 
 global newcorpus
 global finalcorpus
@@ -14,13 +15,6 @@ global vocab
 global f
 global g
 global t
-
-
-
-
-
-
-
 
 
 def count():
@@ -43,7 +37,7 @@ def writeDS():
         for wordcount in finalcorpus:
             index+=1
             totalfile.write('%s\t'%(wordcount.__len__()))
-            for u,v in wordcount.iteritems():
+            for u,v in wordcount:
                 totalfile.write('%s:%s '%(u,v))
             totalfile.write('\n')
 
@@ -58,7 +52,7 @@ def convert():
         voc.write(l+'\n') #.decode('ascii').replace("\u2014","-")
     voc.close()
     for wordcount in newcorpus:
-        for key,value in wordcount.iteritems():
+        for key,value in wordcount:
             temp[str(sorted_vocab.index(key))]=wordcount[key]
         finalcorpus.append(temp)
         temp={}
@@ -72,40 +66,15 @@ def wrd_tok(s_tok):
     for s in s_tok:
         temp=temp+word_tokenize(s,'english')
     w_t=[]
-    remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
+    
     for token in temp:
         if token.strip().__len__() >=3:
-            w_t+=[regex.sub("[^\P{P}-]+", " ", token)]#token.translate(remove_punctuation_map)]
+            w_t+=[regex.sub("[^\P{P}-]+", " ", token)]
     return w_t
 
 
 def tag_tok(temp):
     return nltk.pos_tag(temp)
-
-
-def remove_nouns(tagged_tokens):
-    temp=[]
-    for s in tagged_tokens: #   remove nouns
-          if s[1]!="NNP" and s[1]!="CD" and s[1]!="JJ":
-              temp=temp+[s[0].strip(string.whitespace)]
-          # else:
-          #     removed_nouns.append(s)
-    return temp
-
-
-def exep(temp):
-    dashexep=[]
-    for l in temp:
-        if l.__contains__("\u2014"):
-            word=l.replace("\u2014","-")
-            for token in word.split("-"):
-                if token.__len__() >2:
-                    dashexep+=token
-            temp.remove(l)
-            # g.write(l.replace("\u2014","-")+"\n")
-    for token in dashexep:
-        temp+=token
-    return temp
 
 def steming(doc):
     porter = PorterStemmer()
@@ -120,7 +89,7 @@ def rem_stopwords(temp):
     rem_sw=[]
     a=temp[0]
     for i in a:
-        if not en_stop.__contains__(i.strip(string.whitespace)):
+        if i.strip(string.whitespace) not in en_stop:
             if i.strip(string.whitespace).__len__()>=3:
                 rem_sw+=[i]
     return rem_sw
@@ -136,53 +105,40 @@ def writetemp(s_tok,name):
     d.close()
 
 if __name__ == '__main__':
-    N_cores=4
+    
+    pathname = os.path.dirname(sys.argv[0])        
+    
+    if(len(pathname)<1):
+        pathname="."
+
+    N_cores=12
     corpus=[]
     newcorpus=[]
     finalcorpus=[]
     vocab=[]
-    en_stop=[]
+    en_stop=dict()
     f=io.open("dataset","r",encoding="utf-8")
-    g=open("exeptation.txt",'w')
-    t=open("stopwords.txt")
+    g=open( pathname+"/exeptation.txt",'w')
+    t=open( pathname+"/stopwords.txt")
     for i in t:
-        en_stop.append(i.strip())
+        en_stop[i.strip()]=1
     i=0
-    removed_nouns=[]
     pool=Pool(N_cores)
     print("scentence tokenization start")
     s_tok=pool.map(sent_tok,f)
     print("scentence tokenization done")
     w_tok=pool.map(wrd_tok,s_tok)
     print("word tokenization done")
-    tagged_tokens=pool.map(tag_tok,w_tok)
-    print("tagging done")
-    rem_n=pool.map(remove_nouns,tagged_tokens)
-    print("nouns removed")
-    # ex_w=pool.map(exep,rem_n)
-    # print("exeption done")
-    duck=[]
-    for tr in rem_n:
-        duck+=[[tr]+[en_stop]]
-    rem_swords=pool.map(rem_stopwords,duck)
+    rem_swords=pool.map(rem_stopwords,w_tok)
     print("stopwords removed")
     stem_c=pool.map(steming,rem_swords)
     print("stemming done")
-    # p=open("removed_nouns.txt","w")
-    # for e in removed_nouns:
-    #     p.write(e.decode("ascii")+"\n")
-    # p.close()
+    
     pool.close()
     pool.join()
     corpus=stem_c
     count()
     convert()
     writeDS()
-    writetemp(s_tok,"s-tok")
-    writetemp(w_tok,"w-tok")
-    writetemp([[s[0]] for i in tagged_tokens for s in i],"tag-tok")
-    writetemp(rem_n,"nonrem-tok")
-    writetemp(rem_swords,"remswords")
-    writetemp(stem_c,"stem-tok")
     g.close()
     f.close()
