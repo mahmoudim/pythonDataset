@@ -24,14 +24,19 @@
 	"buffers":
 	[
 		{
-			"contents": "import io\nimport nltk\nimport regex as regex\nfrom nltk.tokenize import word_tokenize,sent_tokenize\nfrom nltk.stem.porter import PorterStemmer\nimport re\nimport string\nfrom multiprocessing import Pool\n\nglobal newcorpus\nglobal finalcorpus\nglobal corpus\nglobal vocab\nglobal f\nglobal g\nglobal t\n\n\n\n\n\n\n\n\n\ndef count():\n    global corpus,newcorpus,vocab\n    for doc in corpus:\n        wordcount={}\n        for word in doc:\n            if word not in wordcount:\n                wordcount[word] = 1\n            else:\n                wordcount[word] += 1\n        newcorpus.append(wordcount)\n        vocab+=list(wordcount)\n\n\ndef writeDS():\n    global finalcorpus\n    with open (\"finalDS.txt\",\"w\") as totalfile:\n        index=0\n        for wordcount in finalcorpus:\n            index+=1\n            totalfile.write('%s\\t'%(wordcount.__len__()))\n            for u,v in wordcount.iteritems():\n                totalfile.write('%s:%s '%(u,v))\n            totalfile.write('\\n')\n\n\ndef convert():\n    global finalcorpus,newcorpus\n    temp={}\n    sorted_vocab=list(sorted(set(vocab)))\n    # voc=open(\"vocab.txt\",'w')\n    voc=io.open(\"vocab.txt\",\"w\",encoding=\"utf-8\")\n    for l in sorted_vocab:\n        voc.write(l+'\\n') #.decode('ascii').replace(\"\\u2014\",\"-\")\n    voc.close()\n    for wordcount in newcorpus:\n        for key,value in wordcount.iteritems():\n            temp[str(sorted_vocab.index(key))]=wordcount[key]\n        finalcorpus.append(temp)\n        temp={}\n\ndef sent_tok(summery):\n    return sent_tokenize(summery,'english') #.decode('utf-8')\n\n\ndef wrd_tok(s_tok):\n    temp=[]\n    for s in s_tok:\n        temp=temp+word_tokenize(s,'english')\n    w_t=[]\n    remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)\n    for token in temp:\n        if token.strip().__len__() >=3:\n            w_t+=[regex.sub(\"[^\\P{P}-]+\", \" \", token)]#token.translate(remove_punctuation_map)]\n    return w_t\n\n\ndef tag_tok(temp):\n    return nltk.pos_tag(temp)\n\n\ndef remove_nouns(tagged_tokens):\n    temp=[]\n    for s in tagged_tokens: #   remove nouns\n          if s[1]!=\"NNP\" and s[1]!=\"CD\" and s[1]!=\"JJ\":\n              temp=temp+[s[0].strip(string.whitespace)]\n          # else:\n          #     removed_nouns.append(s)\n    return temp\n\n\ndef exep(temp):\n    dashexep=[]\n    for l in temp:\n        if l.__contains__(\"\\u2014\"):\n            word=l.replace(\"\\u2014\",\"-\")\n            for token in word.split(\"-\"):\n                if token.__len__() >2:\n                    dashexep+=token\n            temp.remove(l)\n            # g.write(l.replace(\"\\u2014\",\"-\")+\"\\n\")\n    for token in dashexep:\n        temp+=token\n    return temp\n\ndef steming(doc):\n    porter = PorterStemmer()\n    final_doc = []\n    for word in doc:\n        final_doc+=[porter.stem(word.lower())]\n    return final_doc\n\n\ndef rem_stopwords(temp):\n    en_stop=temp[1]\n    rem_sw=[]\n    a=temp[0]\n    for i in a:\n        if not en_stop.__contains__(i.strip(string.whitespace)):\n            if i.strip(string.whitespace).__len__()>=3:\n                rem_sw+=[i]\n    return rem_sw\n\n\n\ndef writetemp(s_tok,name):\n    d=io.open(name+\".txt\",\"w\",encoding=\"utf-8\")\n    for i in s_tok:\n        for w in i:\n            d.write(w+\" \")\n        d.write(u\"\\n\")\n    d.close()\n\nif __name__ == '__main__':\n    N_cores=4\n    corpus=[]\n    newcorpus=[]\n    finalcorpus=[]\n    vocab=[]\n    en_stop=[]\n    f=io.open(\"dataset\",\"r\",encoding=\"utf-8\")\n    g=open(\"exeptation.txt\",'w')\n    t=open(\"stopwords.txt\")\n    for i in t:\n        en_stop.append(i.strip())\n    i=0\n    removed_nouns=[]\n    pool=Pool(N_cores)\n    print(\"scentence tokenization start\")\n    s_tok=pool.map(sent_tok,f)\n    print(\"scentence tokenization done\")\n    w_tok=pool.map(wrd_tok,s_tok)\n    print(\"word tokenization done\")\n    tagged_tokens=pool.map(tag_tok,w_tok)\n    print(\"tagging done\")\n    rem_n=pool.map(remove_nouns,tagged_tokens)\n    print(\"nouns removed\")\n    # ex_w=pool.map(exep,rem_n)\n    # print(\"exeption done\")\n    duck=[]\n    for tr in rem_n:\n        duck+=[[tr]+[en_stop]]\n    rem_swords=pool.map(rem_stopwords,duck)\n    print(\"stopwords removed\")\n    stem_c=pool.map(steming,rem_swords)\n    print(\"stemming done\")\n    # p=open(\"removed_nouns.txt\",\"w\")\n    # for e in removed_nouns:\n    #     p.write(e.decode(\"ascii\")+\"\\n\")\n    # p.close()\n    pool.close()\n    pool.join()\n    corpus=stem_c\n    count()\n    convert()\n    writeDS()\n    writetemp(s_tok,\"s-tok\")\n    writetemp(w_tok,\"w-tok\")\n    writetemp([[s[0]] for i in tagged_tokens for s in i],\"tag-tok\")\n    writetemp(rem_n,\"nonrem-tok\")\n    writetemp(rem_swords,\"remswords\")\n    writetemp(stem_c,\"stem-tok\")\n    g.close()\n    f.close()\n",
 			"file": "dataset.py",
-			"file_size": 4816,
-			"file_write_time": 131799267515819485,
 			"settings":
 			{
-				"buffer_size": 4612,
+				"buffer_size": 3125,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/run/media/mehran/New Volume/Users/Mehran/Documents/MainProject/Codes/degree discounted/0dataset/weigthing/collect.py",
+			"settings":
+			{
+				"buffer_size": 878,
 				"line_ending": "Windows"
 			}
 		}
@@ -440,6 +445,10 @@
 	],
 	"file_history":
 	[
+		"/run/media/mehran/New Volume/Users/Mehran/Documents/MainProject/Codes/degree discounted/0dataset/preprocess/prep.py",
+		"/home/mehran/newstart/stopwords.txt",
+		"/home/mehran/.config/sublime-text-3/Packages/User/mypython.sublime-build",
+		"/home/mehran/.config/sublime-text-3/Cache/Python 3/Python3.tmLanguage.cache",
 		"/usr/local/lib64/python3.6/site-packages/scipy/misc/doccer.py",
 		"/usr/local/lib/python3.6/site-packages/nltk/collocations.py",
 		"/run/media/mehran/New Volume/Users/Mehran/Documents/MainProject/Codes/degree discounted/1extract weights/0corpus/only numbers/tfidf.py",
@@ -479,7 +488,7 @@
 	],
 	"find":
 	{
-		"height": 28.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -493,6 +502,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"iter",
+			"tag_tok",
+			"exep",
 			"scentence",
 			"print",
 			"unicode_literals"
@@ -513,7 +525,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -522,15 +534,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4612,
+						"buffer_size": 3125,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3581,
-								3581
+								2726,
+								2726
 							]
 						],
 						"settings":
@@ -540,7 +552,36 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1824.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/run/media/mehran/New Volume/Users/Mehran/Documents/MainProject/Codes/degree discounted/0dataset/weigthing/collect.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 878,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								340,
+								340
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 591.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -582,7 +623,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 474.0
+		"height": 468.0
 	},
 	"output.files_to_be_deleted":
 	{
@@ -592,7 +633,7 @@
 	{
 		"height": 0.0
 	},
-	"pinned_build_system": "Packages/Python 3/Python3.sublime-build",
+	"pinned_build_system": "Packages/User/mypython.sublime-build",
 	"project": "untitled.sublime-project",
 	"replace":
 	{

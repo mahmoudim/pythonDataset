@@ -46,14 +46,19 @@ def convert():
     global finalcorpus,newcorpus
     temp={}
     sorted_vocab=list(sorted(set(vocab)))
+    sorted_vocab_dict={}
+    num=0
+    for v in sorted_vocab:
+        sorted_vocab_dict[v]=str(num)
+        num+=1
     # voc=open("vocab.txt",'w')
     voc=io.open("vocab.txt","w",encoding="utf-8")
     for l in sorted_vocab:
-        voc.write(l+'\n') #.decode('ascii').replace("\u2014","-")
+        voc.write(l+'\n')
     voc.close()
     for wordcount in newcorpus:
         for key,value in wordcount.items():
-            temp[str(sorted_vocab.index(key))]=wordcount[key]
+            temp[sorted_vocab_dict[key]]=wordcount[key]
         finalcorpus.append(temp)
         temp={}
 
@@ -107,7 +112,7 @@ if __name__ == '__main__':
     finalcorpus=[]
     vocab=[]
     en_stop=dict()
-    f=io.open("dataset","r",encoding="utf-8")
+    f=io.open("dataset.txt","r",encoding="utf-8")
     g=open( pathname+"/exeptation.txt",'w')
     t=open( pathname+"/stopwords.txt")
     for i in t:
