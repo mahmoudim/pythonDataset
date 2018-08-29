@@ -39,7 +39,7 @@ def stat(DS,new_DS,num_vocab,treshold):
 
 if __name__ == '__main__':
     treshold=int(sys.argv[1])
-    f=open("finalDS.txt","r")
+    f=open("../finalDS.txt","r")
     DS=[]
     # DS_word=[]
     for line in f:
@@ -57,7 +57,7 @@ if __name__ == '__main__':
         # DS_word.append()
         DS.append(WC)
     f.close()
-    f=open("vocab.txt","r")
+    f=open("../vocab.txt","r")
     vocab=[]
     for line in f:
         vocab.append(line.strip())
