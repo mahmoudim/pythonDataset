@@ -45,7 +45,7 @@ if __name__ == '__main__':
     for line in f:
         WC={}
         # W=[]
-        line=line.strip().split('\t')
+        line=line[1].strip().split('\t')
         if(len(line)>1):
             l=line.strip().split(" ")
             for item in l:
