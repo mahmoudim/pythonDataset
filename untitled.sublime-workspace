@@ -27,7 +27,7 @@
 			"file": "dataset.py",
 			"settings":
 			{
-				"buffer_size": 3125,
+				"buffer_size": 3144,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -38,6 +38,23 @@
 			{
 				"buffer_size": 878,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "tfidf.py",
+			"settings":
+			{
+				"buffer_size": 2982,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "finalDS.txt",
+			"settings":
+			{
+				"buffer_size": 123515,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -488,7 +505,7 @@
 	],
 	"find":
 	{
-		"height": 40.0
+		"height": 28.0
 	},
 	"find_in_files":
 	{
@@ -525,7 +542,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -534,15 +551,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3125,
+						"buffer_size": 3144,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2726,
-								2726
+								802,
+								802
 							]
 						],
 						"settings":
@@ -552,7 +569,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1824.0,
+						"translation.y": 286.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -584,7 +601,63 @@
 						"translation.y": 591.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "tfidf.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2982,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2513,
+								2513
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1197.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "finalDS.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 123515,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
