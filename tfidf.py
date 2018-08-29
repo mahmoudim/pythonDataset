@@ -45,17 +45,18 @@ if __name__ == '__main__':
     for line in f:
         WC={}
         # W=[]
-        line=line.strip().split('\t')[1]
-        l=line.strip().split(" ")
-        for item in l:
-            d=item.strip()
-            if not d=="":
-                a=d.split(":")
-                if(len(a)>=2):
-                    WC[int(a[0])]=int(a[1])
+        line=line.strip().split('\t')
+        if(len(line)>1):
+            l=line.strip().split(" ")
+            for item in l:
+                d=item.strip()
+                if not d=="":
+                    a=d.split(":")
+                    if(len(a)>=2):
+                        WC[int(a[0])]=int(a[1])
             # W.append(int(item.strip().split(":")[0]))
         # DS_word.append()
-        DS.append(WC)
+            DS.append(WC)
     f.close()
     f=open("../vocab.txt","r")
     vocab=[]
