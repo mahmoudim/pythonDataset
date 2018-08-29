@@ -45,9 +45,9 @@ if __name__ == '__main__':
     for line in f:
         WC={}
         # W=[]
-        line=line[1].strip().split('\t')
+        line=line.strip().split('\t')
         if(len(line)>1):
-            l=line.strip().split(" ")
+            l=line[1].strip().split(" ")
             for item in l:
                 d=item.strip()
                 if not d=="":
@@ -55,7 +55,6 @@ if __name__ == '__main__':
                     if(len(a)>=2):
                         WC[int(a[0])]=int(a[1])
             # W.append(int(item.strip().split(":")[0]))
-        # DS_word.append()
             DS.append(WC)
     f.close()
     f=open("../vocab.txt","r")
