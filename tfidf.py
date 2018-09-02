@@ -1,6 +1,7 @@
 import numpy as np
 import math
-import sys
+import sys,os
+
 def stat(DS,new_DS,num_vocab,treshold):
     g = open("statictics.txt", "w")
     g.write("number of documents: " + str(num_doc) + "\n")
@@ -24,6 +25,8 @@ def stat(DS,new_DS,num_vocab,treshold):
     avg_len = 0.0
     max_len = 0
     min_len = 10000
+    under5=0
+    under10=0
     for doc in new_DS:
         l = len(doc)
         avg_len += l
@@ -31,38 +34,44 @@ def stat(DS,new_DS,num_vocab,treshold):
             max_len = l
         if l < min_len:
             min_len = l
+        if l < 5:
+            under5+=1
+        if l < 10:
+            under10+=1
     g.write("average document lenght: " + str(float(avg_len / num_doc)) + "\n")
     g.write("maximum document lenght: " + str(max_len) + "\n")
     g.write("minimum document lenght: " + str(min_len) + "\n")
+    g.write("document lenght under 5: " + str(under5) + "\n")
+    g.write("document lenght under 10: " + str(under10) + "\n")
     g.close()
 
 
 if __name__ == '__main__':
     treshold=int(sys.argv[1])
-    f=open("../finalDS.txt","r")
+    pathname = os.path.dirname(sys.argv[0])
+
+    if (len(pathname) < 1):
+        pathname = "."
+
+    removeDoctreshold=5
+    f=open("../final_DS.txt","r")
     DS=[]
     # DS_word=[]
     for line in f:
         WC={}
         # W=[]
-        line=line.strip().split('\t')
-        if(len(line)>1):
-            l=line[1].strip().split(" ")
-            for item in l:
-                d=item.strip()
-                if not d=="":
-                    a=d.split(":")
-                    if(len(a)>=2):
-                        WC[int(a[0])]=int(a[1])
+        for item in line.strip().split(" "):
+            if not item.strip()=="":
+                WC[int(item.strip().split(":")[0])]=int(item.strip().split(":")[1])
             # W.append(int(item.strip().split(":")[0]))
-            DS.append(WC)
+        # DS_word.append()
+        DS.append(WC)
     f.close()
     f=open("../vocab.txt","r")
     vocab=[]
     for line in f:
         vocab.append(line.strip())
     f.close()
-
     num_vocab=len(vocab)
     num_doc=len(DS)
     tf=np.zeros(num_vocab).tolist()
@@ -73,29 +82,42 @@ if __name__ == '__main__':
             tf[word]+=count
             df[word]+=1
     for i in range(num_vocab):
-        tf_idf[i]= math.log(1+tf[i])*math.log(float(num_doc/df[i]))
-    
+        tf_idf[i]= math.log(tf[i]+1)*math.log(float(num_doc/df[i]))
     new_vocab=[]
     vocab_new_id=(np.zeros(num_vocab)-1).tolist()
     index=-1
-    for id in np.argsort(tf_idf).tolist()[::-1][:treshold]:
+    for id in list(reversed(np.argsort(tf_idf).tolist()))[:treshold]:
         index+=1
         new_vocab.append(vocab[id])
         vocab_new_id[id]=index
     new_DS=[]
     new_DS_text=[]
+    ids=open("../ids")
+    idfiles=ids.read()
+    idlines=idfiles.split('\n')
+    newiddocs=[]
+    docCount=0
     for doc in DS:
         WC={}
+        valid=0
         t=""
         for word,count in doc.items():
             if not vocab_new_id[word]==-1:
                 n=vocab_new_id[word]
                 WC[n]=count
                 t+=str(n)+":"+str(count)+" "
+                valid+=1
         new_DS.append(WC)
-        new_DS_text.append(t.strip())
+        if valid>removeDoctreshold :
+            newiddocs.append(idlines[docCount])
+            new_DS_text.append(str(valid)+" "+t.strip())
+        docCount+=1
     g=open("new_DS.txt","w")
     for doc in new_DS_text:
+        g.write(doc+"\n")
+    g.close()
+    g=open("new_ids.txt","w")
+    for doc in newiddocs:
         g.write(doc+"\n")
     g.close()
     g=open("new_vocab.txt","w")
@@ -103,8 +125,3 @@ if __name__ == '__main__':
         g.write(v.strip()+"\n")
     g.close()
     stat(DS,new_DS,num_vocab,treshold)
-
-
-
-
-

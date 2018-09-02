@@ -27,7 +27,7 @@
 			"file": "dataset.py",
 			"settings":
 			{
-				"buffer_size": 3144,
+				"buffer_size": 5684,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -44,7 +44,16 @@
 			"file": "tfidf.py",
 			"settings":
 			{
-				"buffer_size": 2982,
+				"buffer_size": 3593,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/mehran/Downloads/bars-solid.svg",
+			"settings":
+			{
+				"buffer_size": 551,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -462,6 +471,7 @@
 	],
 	"file_history":
 	[
+		"/home/mehran/Documents/Projects/CLionProjects/MSFinalProject/datasetRefine/refinePapersById.cpp",
 		"/run/media/mehran/New Volume/Users/Mehran/Documents/MainProject/Codes/degree discounted/0dataset/preprocess/prep.py",
 		"/home/mehran/newstart/stopwords.txt",
 		"/home/mehran/.config/sublime-text-3/Packages/User/mypython.sublime-build",
@@ -505,7 +515,7 @@
 	],
 	"find":
 	{
-		"height": 28.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -542,7 +552,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -551,15 +561,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3144,
+						"buffer_size": 5684,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								802,
-								802
+								0,
+								0
 							]
 						],
 						"settings":
@@ -572,7 +582,7 @@
 						"translation.y": 286.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -601,7 +611,7 @@
 						"translation.y": 591.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -610,15 +620,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2982,
+						"buffer_size": 3593,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2513,
-								2513
+								0,
+								0
 							]
 						],
 						"settings":
@@ -629,11 +639,39 @@
 						"translation.y": 1197.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
+					"file": "/home/mehran/Downloads/bars-solid.svg",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 551,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								551,
+								551
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "finalDS.txt",
 					"semi_transient": false,
 					"settings":
@@ -657,7 +695,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
