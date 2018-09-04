@@ -36,7 +36,7 @@ val training = LDADataset(text);
 // a list of pairs of (number of topics, perplexity)
 var scores = List.empty[(Int,Double)];
 
-val pw = new PrintWriter(new File("res.txt" ));
+
 
 // loop over various numbers of topics, training and evaluating each model
 for (numTopics <- List(100,1000,2000,3000,5000,7000,9000,10000,20000,30000,40000)) {
@@ -46,9 +46,21 @@ for (numTopics <- List(100,1000,2000,3000,5000,7000,9000,10000,20000,30000,40000
   
   val perplexity = model.computePerplexity(training);
 
-  pw.write("[perplexity] perplexity at "+numTopics+" topics: "+perplexity+"\n");
+
+  val savestr = "res.txt"; 
+  val f = new File(savestr);
+
+  var out = new PrintWriter("null");
+  if ( f.exists() && !f.isDirectory() ) {
+      out = new PrintWriter(new FileOutputStream(new File(savestr), true));
+  }
+  else {
+      out = new PrintWriter(savestr);
+  }
+  out.append("[perplexity] perplexity at "+numTopics+" topics: "+perplexity+"\n");
+  out.close();
 
   scores :+= (numTopics, perplexity);
 }
-pw.close();
+
 
