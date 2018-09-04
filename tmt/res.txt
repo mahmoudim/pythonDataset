@@ -1,0 +1,5 @@
+[perplexity] perplexity at 5 topics: 74.6480575047846
+[perplexity] perplexity at 10 topics: 51.198404850026
+[perplexity] perplexity at 15 topics: 57.4806721514927
+[perplexity] perplexity at 20 topics: 81.38983046954067
+[perplexity] perplexity at 25 topics: 26.02825031519859
