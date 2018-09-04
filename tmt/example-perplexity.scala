@@ -39,11 +39,11 @@ var scores = List.empty[(Int,Double)];
 
 
 // loop over various numbers of topics, training and evaluating each model
-for (numTopics <- List(100,1000,2000,3000,5000,7000,9000,10000,20000,30000,40000)) {
+for (numTopics <- List(50,100,150,200,250,300,350,400,450,500,550,600,650,700)) {
   val params = LDAModelParams(numTopics = numTopics, dataset = training);
   val output = file("lda-"+training.signature+"-"+params.signature);
 
-  val model = TrainCVB0LDA(params, training, output=output, maxIterations=1000);
+  val model = TrainCVB0LDA(params, training, output=output, maxIterations=1500);
   
   val perplexity = model.computePerplexity(training);
 
