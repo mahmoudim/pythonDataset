@@ -47,12 +47,7 @@ def stat(DS,new_DS,num_vocab,treshold):
 
 
 if __name__ == '__main__':
-    treshold=int(sys.argv[1])
-    pathname = os.path.dirname(sys.argv[0])
-
-    if (len(pathname) < 1):
-        pathname = "."
-
+    treshold = int(sys.argv[1])
     removeDoctreshold=5
     f=open("../final_DS.txt","r")
     DS=[]
@@ -82,11 +77,11 @@ if __name__ == '__main__':
             tf[word]+=count
             df[word]+=1
     for i in range(num_vocab):
-        tf_idf[i]= math.log(tf[i]+1)*math.log(float(num_doc/df[i]))
+        tf_idf[i]= math.log(tf[i]+1)*math.log(float(num_doc/df[i])+1)
     new_vocab=[]
     vocab_new_id=(np.zeros(num_vocab)-1).tolist()
     index=-1
-    for id in list(reversed(np.argsort(tf_idf).tolist()))[:treshold]:
+    for id in np.argsort(tf_idf).tolist()[::-1][:treshold]:
         index+=1
         new_vocab.append(vocab[id])
         vocab_new_id[id]=index
