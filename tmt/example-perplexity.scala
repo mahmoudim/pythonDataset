@@ -42,7 +42,7 @@ val pw = new PrintWriter(new File("res.txt" ));
 for (numTopics <- List(100,1000,2000,3000,5000,7000,9000,10000,20000,30000,40000)) {
   val params = LDAModelParams(numTopics = numTopics, dataset = training);
   val output = file("lda-"+training.signature+"-"+params.signature);
-  val model = TrainGibbsLDA(params, training, output=output, maxIterations=1000);
+  val model = TrainCVB0LDA(params, training, output=output, maxIterations=1000);
   
   val perplexity = model.computePerplexity(training);
 
