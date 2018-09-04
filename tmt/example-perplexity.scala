@@ -36,21 +36,19 @@ val training = LDADataset(text);
 // a list of pairs of (number of topics, perplexity)
 var scores = List.empty[(Int,Double)];
 
+val pw = new PrintWriter(new File("res.txt" ));
+
 // loop over various numbers of topics, training and evaluating each model
 for (numTopics <- List(100,1000,2000,3000,5000,7000,9000,10000,20000,30000,40000)) {
   val params = LDAModelParams(numTopics = numTopics, dataset = training);
   val output = file("lda-"+training.signature+"-"+params.signature);
-  val model = TrainCVB0LDA(params, training, output=null, maxIterations=500);
+  val model = TrainGibbsLDA(params, dataset, output=output, maxIterations=1000);
   
   val perplexity = model.computePerplexity(training);
 
-  scores :+= (numTopics, perplexity);
-}
-
-
-val pw = new PrintWriter(new File("res.txt" ));
-for ((numTopics,perplexity) <- scores) {
   pw.write("[perplexity] perplexity at "+numTopics+" topics: "+perplexity+"\n");
+
+  scores :+= (numTopics, perplexity);
 }
 pw.close();
 
