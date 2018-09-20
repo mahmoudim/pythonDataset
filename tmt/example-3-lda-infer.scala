@@ -12,8 +12,9 @@ import edu.stanford.nlp.tmt.stage._;
 import edu.stanford.nlp.tmt.model.lda._;
 import edu.stanford.nlp.tmt.model.llda._;
 
+
 // the path of the model to load
-val modelPath = file("lda-1e41860e-30-ba1a7c85");
+val modelPath = file(args(0));
 
 println("Loading "+modelPath);
 val model = LoadCVB0LDA(modelPath);
@@ -22,7 +23,7 @@ val model = LoadCVB0LDA(modelPath);
 
 // A new dataset for inference.  (Here we use the same dataset
 // that we trained against, but this file could be something new.)
-val source = CSVFile("minidataset.csv") ~> IDColumn(1);
+val source = CSVFile("dataset.csv") ~> IDColumn(1);
 
 val text = {
   source ~>                              // read from the source file

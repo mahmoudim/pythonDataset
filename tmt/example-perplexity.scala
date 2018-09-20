@@ -26,9 +26,9 @@ val text = {
   Column(2) ~>                           // select column containing text
   TokenizeWith(tokenizer) ~>             // tokenize with tokenizer above
   TermCounter() ~>                       // collect counts (needed below)
-  TermMinimumDocumentCountFilter(1) ~>   // filter terms in <4 docs
-  TermDynamicStopListFilter(0) ~>       // filter out 30 most common terms
-  DocumentMinimumLengthFilter(1)         // take only docs with >=5 terms
+  TermMinimumDocumentCountFilter(1) ~>   // filter terms in <1 docs
+  TermDynamicStopListFilter(0) ~>       // filter out 0 most common terms
+  DocumentMinimumLengthFilter(1)         // take only docs with >=1 terms
 }
 // build a training dataset
 val training = LDADataset(text);
